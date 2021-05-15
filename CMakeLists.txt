@@ -183,24 +183,24 @@ target_link_libraries(surge-shared PUBLIC
 # JUCE Cmake file list.
 set(SURGE_COMPILER_INFO "${CMAKE_CXX_COMPILER_ID}-${CMAKE_CXX_COMPILER_VERSION}")
 execute_process(
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   COMMAND ${CMAKE_COMMAND} -D PROJECT_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}  -D PROJECT_VERSION_MINOR=${PROJECT_VERSION_MINOR}
-                           -D SURGESRC=${CMAKE_SOURCE_DIR} -D SURGEBLD=${CMAKE_BINARY_DIR}
+                           -D SURGESRC=${CMAKE_CURRENT_SOURCE_DIR} -D SURGEBLD=${CMAKE_BINARY_DIR}
                            -D AZURE_PIPELINE=${AZURE_PIPELINE}
                            -D WIN32=${WIN32}
                            -D CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                            -D SURGE_COMPILER_INFO="${SURGE_COMPILER_INFO}"
-                           -P ${CMAKE_SOURCE_DIR}/cmake/versiontools.cmake
+                           -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/versiontools.cmake
                            )
 add_custom_target( git-info BYPRODUCTS ${CMAKE_BINARY_DIR}/geninclude/version.cpp
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   COMMAND ${CMAKE_COMMAND} -D PROJECT_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}  -D PROJECT_VERSION_MINOR=${PROJECT_VERSION_MINOR}
-                           -D SURGESRC=${CMAKE_SOURCE_DIR} -D SURGEBLD=${CMAKE_BINARY_DIR}
+                           -D SURGESRC=${CMAKE_CURRENT_SOURCE_DIR} -D SURGEBLD=${CMAKE_BINARY_DIR}
                            -D AZURE_PIPELINE=${AZURE_PIPELINE}
                            -D WIN32=${WIN32}
                            -D CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                            -D SURGE_COMPILER_INFO="${SURGE_COMPILER_INFO}"
-                           -P ${CMAKE_SOURCE_DIR}/cmake/versiontools.cmake
+                           -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/versiontools.cmake
                            )
 add_dependencies( surge-shared git-info )
 
@@ -1003,8 +1003,8 @@ endif()
 add_custom_target(surge-staged-nonbuilt-assets)
 add_custom_command(TARGET surge-staged-nonbuilt-assets
         POST_BUILD
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/resources/surge-xt/README.txt ${SURGE_PRODUCT_DIR}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/resources/surge-xt/README.txt ${SURGE_PRODUCT_DIR}
         )
 add_dependencies(surge-staged-assets surge-staged-nonbuilt-assets)
 
@@ -1046,8 +1046,8 @@ if( APPLE )
   add_custom_command(TARGET surge-xt-distribution
           POST_BUILD
           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-          COMMAND ${CMAKE_COMMAND} -E echo ${CMAKE_SOURCE_DIR}/installer_mac/make_installer.sh "${SURGE_PRODUCT_DIR}" "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/${SURGE_XT_DIST_OUTPUT_DIR}" "${SXTVER}"
-          COMMAND ${CMAKE_SOURCE_DIR}/scripts/installer_mac/make_installer.sh "${SURGE_PRODUCT_DIR}" "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/${SURGE_XT_DIST_OUTPUT_DIR}" "${SXTVER}"
+          COMMAND ${CMAKE_COMMAND} -E echo ${CMAKE_CURRENT_SOURCE_DIR}/installer_mac/make_installer.sh "${SURGE_PRODUCT_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/${SURGE_XT_DIST_OUTPUT_DIR}" "${SXTVER}"
+          COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/scripts/installer_mac/make_installer.sh "${SURGE_PRODUCT_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/${SURGE_XT_DIST_OUTPUT_DIR}" "${SXTVER}"
           )
 endif()
 
@@ -1055,8 +1055,8 @@ if( UNIX AND NOT APPLE )
   add_custom_command(TARGET surge-xt-distribution
           POST_BUILD
           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-          COMMAND ${CMAKE_COMMAND} -E echo ${CMAKE_SOURCE_DIR}/installer_linux/make_deb.sh "${SURGE_PRODUCT_DIR}" "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/${SURGE_XT_DIST_OUTPUT_DIR}" "${SXTVER}"
-          COMMAND ${CMAKE_SOURCE_DIR}/scripts/installer_linux/make_deb.sh "${SURGE_PRODUCT_DIR}" "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/${SURGE_XT_DIST_OUTPUT_DIR}" "${SXTVER}"
+          COMMAND ${CMAKE_COMMAND} -E echo ${CMAKE_CURRENT_SOURCE_DIR}/installer_linux/make_deb.sh "${SURGE_PRODUCT_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/${SURGE_XT_DIST_OUTPUT_DIR}" "${SXTVER}"
+          COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/scripts/installer_linux/make_deb.sh "${SURGE_PRODUCT_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/${SURGE_XT_DIST_OUTPUT_DIR}" "${SXTVER}"
           )
 endif()
 
@@ -1072,16 +1072,16 @@ if( WIN32 )
         POST_BUILD
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         COMMAND ${SURGE_NUGET_EXE} install Tools.InnoSetup -version 6.1.2
-        COMMAND ${CMAKE_COMMAND} -E echo Tools.InnoSetup.6.1.2/tools/iscc.exe /DSURGE_SRC="${CMAKE_SOURCE_DIR}" /DSURGE_BIN="${CMAKE_BINARY_DIR}" "${CMAKE_SOURCE_DIR}/scripts/installer_win/surge.iss"
-        COMMAND Tools.InnoSetup.6.1.2/tools/iscc.exe /O"${CMAKE_BINARY_DIR}/${SURGE_XT_DIST_OUTPUT_DIR}" /DSURGE_SRC="${CMAKE_SOURCE_DIR}" /DSURGE_BIN="${CMAKE_BINARY_DIR}" "${CMAKE_SOURCE_DIR}/scripts/installer_win/surge-x86.iss"
+        COMMAND ${CMAKE_COMMAND} -E echo Tools.InnoSetup.6.1.2/tools/iscc.exe /DSURGE_SRC="${CMAKE_CURRENT_SOURCE_DIR}" /DSURGE_BIN="${CMAKE_BINARY_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/scripts/installer_win/surge.iss"
+        COMMAND Tools.InnoSetup.6.1.2/tools/iscc.exe /O"${CMAKE_BINARY_DIR}/${SURGE_XT_DIST_OUTPUT_DIR}" /DSURGE_SRC="${CMAKE_CURRENT_SOURCE_DIR}" /DSURGE_BIN="${CMAKE_BINARY_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/scripts/installer_win/surge-x86.iss"
       )
     else()
       add_custom_command(TARGET surge-xt-distribution
           POST_BUILD
           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
           COMMAND ${SURGE_NUGET_EXE} install Tools.InnoSetup -version 6.1.2
-          COMMAND ${CMAKE_COMMAND} -E echo Tools.InnoSetup.6.1.2/tools/iscc.exe /DSURGE_SRC="${CMAKE_SOURCE_DIR}" /DSURGE_BIN="${CMAKE_BINARY_DIR}" "${CMAKE_SOURCE_DIR}/scripts/installer_win/surge.iss"
-          COMMAND Tools.InnoSetup.6.1.2/tools/iscc.exe /O"${CMAKE_BINARY_DIR}/${SURGE_XT_DIST_OUTPUT_DIR}" /DSURGE_SRC="${CMAKE_SOURCE_DIR}" /DSURGE_BIN="${CMAKE_BINARY_DIR}" "${CMAKE_SOURCE_DIR}/scripts/installer_win/surge.iss"
+          COMMAND ${CMAKE_COMMAND} -E echo Tools.InnoSetup.6.1.2/tools/iscc.exe /DSURGE_SRC="${CMAKE_CURRENT_SOURCE_DIR}" /DSURGE_BIN="${CMAKE_BINARY_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/scripts/installer_win/surge.iss"
+          COMMAND Tools.InnoSetup.6.1.2/tools/iscc.exe /O"${CMAKE_BINARY_DIR}/${SURGE_XT_DIST_OUTPUT_DIR}" /DSURGE_SRC="${CMAKE_CURRENT_SOURCE_DIR}" /DSURGE_BIN="${CMAKE_BINARY_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/scripts/installer_win/surge.iss"
         )
     endif()
   endif()
@@ -1109,7 +1109,7 @@ if( UNIX AND NOT APPLE)
       install(TARGETS surge-fx_LV2 DESTINATION lib/lv2)
     endif()
   endif()
-  install(DIRECTORY ${CMAKE_SOURCE_DIR}/resources/data/ DESTINATION share/surge-xt)
+  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/resources/data/ DESTINATION share/surge-xt)
 endif()
 
 
@@ -1237,7 +1237,7 @@ foreach(dir ${CLANG_FORMAT_DIRS})
 endforeach()
 add_custom_command(TARGET code-quality-pipeline-checks
   POST_BUILD
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   COMMAND ${CMAKE_COMMAND} -E echo About to check clang-format
   COMMAND git ls-files -- ${CLANG_FORMAT_GLOBS} | xargs clang-format --dry-run --Werror
 )
