@@ -4,7 +4,7 @@
 
 cmake_minimum_required(VERSION 3.15)
 cmake_policy(SET CMP0091 NEW)
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+#set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 set(CMAKE_OSX_DEPLOYMENT_TARGET 10.11 CACHE STRING "Build for 10.9")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
@@ -134,13 +134,13 @@ else()
   message( STATUS "Surge Copy After Build activated" )
 endif()
 
-if( SURGE_ALTERNATE_JUCE )
-  message( STATUS "Using *Alternate* JUCE from ${SURGE_ALTERNATE_JUCE}" )
-  add_subdirectory( ${SURGE_ALTERNATE_JUCE} ${CMAKE_BINARY_DIR}/alternate-juce  EXCLUDE_FROM_ALL)
-else()
-  message( STATUS "Using JUCE from submodule libs/JUCE" )
-  add_subdirectory( libs/JUCE EXCLUDE_FROM_ALL )
-endif()
+# if( SURGE_ALTERNATE_JUCE )
+#   message( STATUS "Using *Alternate* JUCE from ${SURGE_ALTERNATE_JUCE}" )
+#   add_subdirectory( ${SURGE_ALTERNATE_JUCE} ${CMAKE_BINARY_DIR}/alternate-juce  EXCLUDE_FROM_ALL)
+# else()
+#   message( STATUS "Using JUCE from submodule libs/JUCE" )
+#   add_subdirectory( libs/JUCE EXCLUDE_FROM_ALL )
+# endif()
 
 include(cmake/stage-extra-content.cmake)
 
@@ -525,9 +525,9 @@ source_group( "Surge FX Juce" REGULAR_EXPRESSION "src/surge_effects_bank" )
 # SURGE Core
 #
 
-target_sources(surge-shared PRIVATE ${SURGE_SHARED_SOURCES}  ${SURGE_SYNTH_SOURCES} ${SURGE_OS_SHARED_SOURCES})
+target_sources(surge-shared PRIVATE ${SURGE_SHARED_SOURCES} ${SURGE_GENERATED_SOURCES}  ${SURGE_SYNTH_SOURCES} ${SURGE_OS_SHARED_SOURCES})
 target_include_directories(surge-shared
-        PRIVATE
+        PUBLIC
         ${SURGE_COMMON_INCLUDES}
         ${OS_INCLUDE_DIRECTORIES}
         )
