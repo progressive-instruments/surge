@@ -3134,7 +3134,7 @@ void SurgeSynthesizer::processControl()
 
     storage.songpos = time_data.ppqPos;
     storage.temposyncratio = time_data.tempo / 120.f;
-    storage.temposyncratio_inv = 1.f / storage.temposyncratio;
+    storage.temposyncratio_inv = storage.temposyncratio != 0 ? 1.f / storage.temposyncratio : 0;
 
     // TODO: FIX SCENE ASSUMPTION
     if (release_if_latched[0])
