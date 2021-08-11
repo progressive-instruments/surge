@@ -365,7 +365,7 @@ inline bool is_yes(const char *str)
 {
     if (!str)
         return 0;
-    if (_stricmp(str, "yes") == 0)
+    if (strcmp(str, "yes") == 0)
         return 1;
     return 0;
 }
