@@ -1051,15 +1051,24 @@ void SurgeSynthesizer::releaseNotePostHoldCheck(int scene, char channel, char ke
                         case ALWAYS_HIGHEST:
                         case NOTE_ON_LATEST_RETRIGGER_HIGHEST:
                             k = highest >= 0 ? highest : -1;
-                            kchan = hichan;
+                            if (k >= 0) 
+                            {
+                                kchan = hichan;
+                            }
                             break;
                         case ALWAYS_LATEST:
                             k = latest >= 0 ? latest : -1;
-                            kchan = latechan;
+                            if (k >= 0) 
+                            {
+                                kchan = latechan;
+                            }
                             break;
                         case ALWAYS_LOWEST:
                             k = lowest <= 127 ? lowest : -1;
-                            kchan = lowchan;
+                            if (k >= 0)
+                            {
+                                kchan = lowchan;
+                            }
                             break;
                         }
 
